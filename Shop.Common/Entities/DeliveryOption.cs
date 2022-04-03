@@ -15,8 +15,3 @@ namespace Shop.Common.Entities
     }
 }
 
-
-
-// Poczta Polska => 6.99 PLN => 7 dni
-// Paczkomat InPost => 10.99 PLN => 3 dni
-// Kurier => 17.99 PLN => 1 dzień

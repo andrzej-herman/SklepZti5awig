@@ -14,10 +14,3 @@ namespace Shop.Common.Entities
 }
 
 
-// Elektronika
-// Dom i ogród
-// Odzież męska
-// Odzież damska
-// Odzież dziecięca
-// Kosmetyki i uroda
-// Inne

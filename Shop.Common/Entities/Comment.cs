@@ -9,6 +9,7 @@ namespace Shop.Common.Entities
     public class Comment
     {
         public string CommentId { get; set; }
+        public string ProductId { get; set; }
         public string CommentText { get; set; }
         public int Note { get; set; }
     }
