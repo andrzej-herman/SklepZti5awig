@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Shop.Api.Services;
 using Shop.Common;
-using Shop.Common.Entities;
-using Shop.Common.Models;
+using Shop.Common.Dtos;
+
 
 namespace Shop.Api.Controllers
 {
     [ApiController]
+    [Route("shop")]
     public class ShopController : ControllerBase
     {
         private readonly IShopService _service;
@@ -17,57 +18,18 @@ namespace Shop.Api.Controllers
         }
 
         [HttpGet]
-        [Route("/products")]
-        public IEnumerable<Product> GetProducts([FromQuery] string categoryId)
-        {
-            return _service.GetProducts(categoryId);
-        }
-
-
-        [HttpGet]
         [Route("/categories")]
-        public IEnumerable<Category> GetCategories()
+        public IEnumerable<CategoryDto> GetCategories()
         {
-            return _service.GetCategories();
+           return _service.GetCategories();
         }
 
         [HttpGet]
         [Route("/deliveries")]
-        public IEnumerable<DeliveryOption> GetDeliveryOptions()
+        public IEnumerable<DeliveryOptionDto> GetDeliveries()
         {
             return _service.GetDeliveryOptions();
         }
 
-        [HttpGet]
-        [Route("/product")]
-        public Product GetProductById([FromQuery] string productId)
-        {
-            return _service.GetProductById(productId);
-        }
-
-
-        [HttpPost]
-        [Route("/product")]
-        public Product AddProduct(AddProductDTO dto)
-        {
-            var product = new Product
-            {
-                ProductId = Helper.GetKey(),
-                UserId = dto.UserId,
-                Category = _service.GetCategories().FirstOrDefault(c => c.CategoryId == dto.CategoryId),
-                Name = dto.Name,
-                Description = dto.Description,
-                Quantity = dto.Quantity,
-                Price = dto.Price,
-                ImageUrl = dto.ImageUrl,
-                IsPromoted = dto.IsPromoted,
-                DateAdd = DateTime.Now,
-            };
-
-            return _service.AddProduct(product);
-        }
     }
-
-
-    //Comment AddComment(Comment comment);
 }
