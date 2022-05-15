@@ -9,14 +9,10 @@ namespace Shop.Api.Services
     {
         IEnumerable<CategoryDto> GetCategories();
         IEnumerable<DeliveryOptionDto> GetDeliveryOptions();
-        IEnumerable<ProductToTableDto> GetProductsToTable();
-
-
-
-
-
-        // Product GetProductById(string productId);
-        // Product AddProduct(Product product);
-        // Comment AddComment(Comment comment);
+        IEnumerable<ProductToTableDto> GetProductsToTable(string categoryId);
+        ResponseDto AddProduct(AddProductDto dto);
+        ProductDetailsDto GetProductById(string productId);
+        ResponseDto AddComment(AddCommentDto dto);
+        
     }
 }

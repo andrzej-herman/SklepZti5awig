@@ -16,3 +16,25 @@ namespace Shop.Common.Dtos
         public decimal ProductPrice { get; set; }
     }
 }
+
+
+
+
+// [Key]
+// [StringLength(200)]
+// public string ProductId { get; set; }
+// [Required]
+// [StringLength(200)]
+// public string ShopUserId { get; set; }
+// [Required]
+// [StringLength(200)]
+// public string CategoryId { get; set; }
+// [Required]
+// [StringLength(100)]
+// public string ProductName { get; set; }
+// public string ProductDescription { get; set; }
+// public int ProductQuantity { get; set; }
+// [Column(TypeName = "decimal(18, 0)")]
+// public decimal ProductPrice { get; set; }
+// public DateTime ProductDateCreated { get; set; }
+// public bool ProductIsPromoted { get; set; }

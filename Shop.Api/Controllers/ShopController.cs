@@ -30,6 +30,34 @@ namespace Shop.Api.Controllers
         {
             return _service.GetDeliveryOptions();
         }
-
+        
+        [HttpGet]
+        [Route("/productstotable")]
+        public IEnumerable<ProductToTableDto> GetProductsToTable([FromQuery] string categoryId)
+        {
+            return _service.GetProductsToTable(categoryId);
+        }
+        
+        [HttpPost]
+        [Route("/addproduct")]
+        public ResponseDto AddProduct(AddProductDto dto)
+        {
+            return _service.AddProduct(dto);
+        }
+        
+        [HttpGet]
+        [Route("/productdetails")]
+        public ProductDetailsDto GetProductById(string productId)
+        {
+            return _service.GetProductById(productId);
+        }
+        
+        [HttpPost]
+        [Route("/comment")]
+        public ResponseDto AddComment(AddCommentDto dto)
+        {
+            return _service.AddComment(dto);
+        }
+        
     }
 }

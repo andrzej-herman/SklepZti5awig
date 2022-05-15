@@ -6,6 +6,9 @@ namespace Shop.Api.Repository
     {
         IEnumerable<Category> GetCategories();
         IEnumerable<DeliveryOption> GetDeliveryOptions();
-        IEnumerable<Product> GetProductsToTable();
+        IEnumerable<Product> GetProductsToTable(string categoryId);
+        bool AddProduct(Product product, out string error);
+        Product GetProductById(string productId);
+        bool AddComment(Comment comment, out string error);
     }
 }

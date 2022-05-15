@@ -42,7 +42,7 @@ namespace Shop.Api.Entities
         public virtual ShopUser ShopUser { get; set; }
         [InverseProperty("Product")]
         public virtual ICollection<Comment> Comments { get; set; }
-
+        
         [ForeignKey("ProductId")]
         [InverseProperty("Products")]
         public virtual ICollection<DeliveryOption> DeliveryOptions { get; set; }
