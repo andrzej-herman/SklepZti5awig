@@ -1,9 +1,57 @@
 ﻿@page "/"
+@using Shop.Common.Dtos
+@inject HttpClient _httpClient;
+<PageTitle>Sklep San</PageTitle>
+<h1>Oferta</h1>
+<hr/>
 
-<PageTitle>Index</PageTitle>
+@if (ProductList != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Kategoria</th>
+                <th>Cena</th>
+                <th>Opis</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in ProductList)
+            {
+                <tr>
+                    <td>@product.ProductName</td>
+                    <td>@product.CategoryName</td>
+                    <td>@product.ProductPrice.ToString("N2")</td>
+                    <td>@product.ProductDescription</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Trwa pobieranie listy ofert ...</p>
+}
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+@code {
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    ProductToTableDto[] ProductList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var address = $"{_httpClient.BaseAddress}productstotable";
+        var response = await _httpClient.GetAsync(address);
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            ProductList = JsonConvert.DeserializeObject<ProductToTableDto[]>(json);
+        }
+    }
+}
+
+
+
+
+

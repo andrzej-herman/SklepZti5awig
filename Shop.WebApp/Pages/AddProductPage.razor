@@ -1,0 +1,146 @@
+﻿@page "/addproduct"
+@inject HttpClient _httpClient
+<PageTitle>Sklep San</PageTitle>
+<h1>Dodaj produkt do sprzedaży</h1>
+<hr/>
+<div class="container">
+    @if (Categories != null && _deliveries != null)
+    {
+        <div class="row">
+         <div class="col-lg-6 offset-lg-3">
+              <RadzenTemplateForm TItem="AddProductDto" Data=@model Submit=@OnSubmit>
+                  <div class="row">
+                      <div class="col-lg-12">
+                        <RadzenLabel Text="Nazwa produktu"></RadzenLabel>
+                        <RadzenTextBox style="display: block" Name="ProductName" @bind-Value=@model.ProductName Class="w-100" />
+                        <RadzenRequiredValidator Component="ProductName" Text="Proszę podać nazwę produktu" Popup=false Style="position: absolute"/>
+                      </div>
+                  </div>
+
+                  <div class="row mt-3">
+                      <div class="col-lg-12">
+                        <RadzenLabel Text="Wybierz kategorię produktu"></RadzenLabel>
+                        <RadzenDropDown AllowClear="true" TValue="string" Class="w-100" 
+                                Data=@Categories
+                                TextProperty="CategoryName" ValueProperty="CategoryId" Change=@(args => OnCategoryChange(args)) />
+                      </div>
+                  </div>
+
+                   <div class="row mt-3">
+                      <div class="col-lg-12">
+                        <RadzenLabel Text="Opis produktu"></RadzenLabel>
+                        <RadzenTextArea style="display: block" Name="ProductDescription" @bind-Value=@model.ProductDescription Class="w-100" />
+                        <RadzenRequiredValidator Component="ProductDescription" Text="Proszę wpisać opis produktu" Popup=false Style="position: absolute"/>
+                      </div>
+                   </div>
+
+                    <div class="row mt-3">
+                      <div class="col-lg-6">
+                        <RadzenLabel Text="Cena produktu"></RadzenLabel>
+                        <RadzenNumeric Min="1.00m" TValue="decimal" Format="#0.00" @bind-Value=@model.ProductPrice />
+                      </div>
+                       <div class="col-lg-6">
+                        <RadzenLabel Text="Dostępna ilość"></RadzenLabel> 
+                        <RadzenNumeric TValue="int" Class="w-100" Min="1" @bind-Value=@model.ProductQuantity/>
+                      </div>
+                   </div>
+
+                  <div class="row mt-3">
+                      <div class="col-lg-12">
+                      <RadzenLabel Text="Wybierz formy dostawy"></RadzenLabel> 
+                      <select multiple class="form-select">
+                          <option selected>Open this select menu</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                      </select>
+
+                      </div>
+                  </div>
+
+                  <div class="row" style="margin-top: 50px">
+                      <div class="col-lg-12">
+                        <RadzenButton ButtonType="ButtonType.Submit" Text="Zapisz produkt"></RadzenButton>
+                      </div>
+                  </div>
+
+              </RadzenTemplateForm>
+         </div>
+     </div>
+    }
+</div>
+
+@code {
+    AddProductDto model = new AddProductDto() { ProductQuantity = 1 };
+
+    CategoryDto[] Categories;
+    DeliveryOptionDto[] Deliveries;
+    List<string> _deliveries;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCategories();
+        await GetDeliveries();
+    }
+
+    async Task GetCategories()
+    {
+        var address = $"{_httpClient.BaseAddress}categories";
+        var response = await _httpClient.GetAsync(address);
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            Categories = JsonConvert.DeserializeObject<CategoryDto[]>(json);
+        }
+    }
+
+
+    async Task GetDeliveries()
+    {
+        var address = $"{_httpClient.BaseAddress}deliveries";
+        var response = await _httpClient.GetAsync(address);
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            Deliveries = JsonConvert.DeserializeObject<DeliveryOptionDto[]>(json);
+            _deliveries = Deliveries.Select(x => x.DeliveryOptionName).ToList();
+        }
+    }
+
+
+    void OnCategoryChange(object value)
+    {
+        model.CategoryId = value != null ? value.ToString() : null;
+    }
+
+    void OnDeliveryChange(object value)
+    {
+        if (value is IEnumerable<string>)
+        {
+            var data = value as IEnumerable<string>;
+            model.AvailableDeliveryOptions = new List<string>();
+            model.AvailableDeliveryOptions.AddRange(data);
+        }
+    }
+
+
+    void OnSubmit(AddProductDto model)
+    {
+        model.ShopUserId = "0bdd2eacacdc43c4bcb8ac0dc92a3740";
+        // sprawdzić czy wybrano kategorię
+        // sprawdzić czy ustawiono cenę
+    }
+
+}
+
+@*  
+    
+
+
+
+    
+    //[Required]
+    //public bool ProductIsPromoted { get; set; }
+    
+    //[Required] public List<string> AvailableDeliveryOptions { get; set; }*@

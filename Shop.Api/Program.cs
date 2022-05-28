@@ -2,7 +2,20 @@ using Microsoft.EntityFrameworkCore;
 using Shop.Api.Entities;
 using Shop.Api.Repository;
 using Shop.Api.Services;
+
+const string CorsOrigins = "_corsOrigins";
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CorsOrigins,
+        corsPolicyBuilder =>
+        {
+            corsPolicyBuilder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,5 +36,6 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseCors(CorsOrigins);
 app.MapControllers();
 app.Run();
