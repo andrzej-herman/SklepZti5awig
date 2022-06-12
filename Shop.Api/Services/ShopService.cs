@@ -8,12 +8,12 @@ namespace Shop.Api.Services
     public class ShopService : IShopService
     {
         private readonly IShopRepository _repo;
-
+        
         public ShopService(IShopRepository repo)
         {
             _repo = repo;
         }
-
+        
         public IEnumerable<CategoryDto> GetCategories()
         {
             return _repo.GetCategories().Select(c => new CategoryDto()
@@ -22,7 +22,7 @@ namespace Shop.Api.Services
                 CategoryName = c.CategoryName,
             });
         }
-
+        
         public IEnumerable<DeliveryOptionDto> GetDeliveryOptions()
         {
             return _repo.GetDeliveryOptions().Select(c => new DeliveryOptionDto()
@@ -31,7 +31,7 @@ namespace Shop.Api.Services
                 DeliveryOptionName = c.DeliveryOptionName
             });
         }
-
+        
         public IEnumerable<ProductToTableDto> GetProductsToTable(string categoryId)
         {
             return _repo.GetProductsToTable(categoryId).Select(p => new ProductToTableDto() 
@@ -44,7 +44,7 @@ namespace Shop.Api.Services
                 ProductQuantity = p.ProductQuantity
             });
         }
-
+        
         public ResponseDto AddProduct(AddProductDto dto)
         {
             var product = new Product()
@@ -58,21 +58,21 @@ namespace Shop.Api.Services
                 ProductPrice = dto.ProductPrice,
                 ProductIsPromoted = dto.ProductIsPromoted
             };
-
+        
             var dbDeliveryOptions = _repo.GetDeliveryOptions()
                 .Where(o => dto.AvailableDeliveryOptions.Contains(o.DeliveryOptionId));
-
+        
             foreach (var dbdo in dbDeliveryOptions)
             {
                 product.DeliveryOptions.Add(dbdo);
             }
-
+        
             var result = _repo.AddProduct(product, out var error);
             return result ? 
                 new ResponseDto() {Result = true, Description = "Produkt został pomyślnie dodany."} 
                 : new ResponseDto() {Result = false, Description = $"Błąd podcazas dodawania produktu: {error}"};
         }
-
+        
         public ProductDetailsDto GetProductById(string productId)
         {
             var product = _repo.GetProductById(productId);
@@ -89,7 +89,7 @@ namespace Shop.Api.Services
                 ProductQuantity = product.ProductQuantity,
                 DeliveryOptions = new List<DeliveryOptionDetailsDto>()
             };
-
+        
             foreach (var pdo in product.DeliveryOptions)
             {
                 dto.DeliveryOptions.Add(new DeliveryOptionDetailsDto()
@@ -100,7 +100,7 @@ namespace Shop.Api.Services
                     DeliveryOptionDays = pdo.DeliveryOptionDays
                 });
             }
-
+        
             dto.Comments = new List<CommentDto>();
             foreach (var pc in product.Comments)
             {
@@ -110,12 +110,12 @@ namespace Shop.Api.Services
                     CommentText = pc.CommentText,
                     Note  = pc.Note
                 });
- 
+        
             }
-
+        
             return dto;
         }
-
+        
         public ResponseDto AddComment(AddCommentDto dto)
         {
             var comment = new Comment()

@@ -23,7 +23,7 @@ namespace Shop.Api.Controllers
         {
            return _service.GetCategories();
         }
-
+        
         [HttpGet]
         [Route("/deliveries")]
         public IEnumerable<DeliveryOptionDto> GetDeliveries()

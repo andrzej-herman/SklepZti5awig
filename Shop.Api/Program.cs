@@ -21,6 +21,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IShopService, ShopService>();
 builder.Services.AddScoped<IShopRepository, ShopRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddDbContext<SanShopContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("ShopConnetion"),
